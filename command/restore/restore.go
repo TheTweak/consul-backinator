@@ -43,6 +43,7 @@ func (c *Command) restoreKeys() (int, error) {
 		}
 	}
 
+	logCount := len(kvps) / 10
 	// loop through keys
 	for _, kv := range kvps {
 		// filter by prefix
@@ -56,6 +57,9 @@ func (c *Command) restoreKeys() (int, error) {
 		} else {
 			// success - increment count
 			count++
+			if count%logCount == 0 {
+				c.Log.Printf("[Info] Restored %d / %d keys, last key:\n%s", count, len(kvps), kv.Key)
+			}
 		}
 	}
 
